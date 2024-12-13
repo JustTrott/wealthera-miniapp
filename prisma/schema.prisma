@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model feedback {
+  feedback_id Int      @id @default(autoincrement())
+  user_id     Int
+  text        String
+  created_at  DateTime @db.Timestamp(6)
+  user        user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([user_id], map: "feedback_user_id")
+}
+
+model recurringtransaction {
+  recurring_id        Int       @id @default(autoincrement())
+  user_id             Int
+  category            String    @db.VarChar(255)
+  amount              Decimal   @db.Decimal(10, 2)
+  description         String?
+  frequency           String    @db.VarChar(255)
+  start_date          DateTime  @db.Timestamp(6)
+  end_date            DateTime? @db.Timestamp(6)
+  last_generated_date DateTime? @db.Timestamp(6)
+  is_active           Boolean
+  created_at          DateTime  @db.Timestamp(6)
+  updated_at          DateTime  @db.Timestamp(6)
+  user                user      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([user_id], map: "recurringtransaction_user_id")
+}
+
+model transaction {
+  transaction_id Int      @id @default(autoincrement())
+  user_id        Int
+  category       String   @db.VarChar(255)
+  amount         Decimal  @db.Decimal(10, 2)
+  description    String?
+  date           DateTime @db.Timestamp(6)
+  created_at     DateTime @db.Timestamp(6)
+  user           user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([user_id], map: "transaction_user_id")
+}
+
+model user {
+  user_id              Int                    @id @default(autoincrement())
+  telegram_id          String                 @unique(map: "user_telegram_id") @db.VarChar(255)
+  mobile_number        String?                @unique(map: "user_mobile_number") @db.VarChar(255)
+  is_premium           Boolean
+  created_at           DateTime               @db.Timestamp(6)
+  updated_at           DateTime               @db.Timestamp(6)
+  feedback             feedback[]
+  recurringtransaction recurringtransaction[]
+  transaction          transaction[]
+}
