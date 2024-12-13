@@ -33,7 +33,6 @@ export default function Home() {
 				<p>
 					Your Telegram Premium: {userData?.isPremium ? "Yes" : "No"}
 				</p>
-				<p>Your data: {JSON.stringify(userData)}</p>
 				<Image
 					className="dark:invert"
 					src="https://nextjs.org/icons/next.svg"
