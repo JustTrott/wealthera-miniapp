@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { AddTransactionForm } from "./add-transaction-form";
 import { TransactionList } from "./transaction-list";
