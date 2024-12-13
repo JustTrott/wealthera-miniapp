@@ -9,6 +9,18 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+const mockUser = {
+	allowsWriteToPm: true,
+	firstName: "Tima",
+	id: 526419716,
+	isPremium: true,
+	languageCode: "en",
+	lastName: "",
+	photoUrl:
+		"https://t.me/i/userpic/320/ydL-R7MRp1C3ohWwYR1Qvi1fBOlWY-O9TZ_WvzVpcDo.svg",
+	username: "zTrott",
+};
+
 export default function Home() {
 	const [userData, setUserData] = useState<User | null>(null);
 
@@ -18,8 +30,14 @@ export default function Home() {
 			backButton.mount();
 			const { initData } = retrieveLaunchParams();
 			setUserData(initData?.user ?? null);
+
+			if (initData?.user) {
+				window.location.href = `/${initData.user.id}`;
+			}
 		} catch (error) {
+			setUserData(mockUser);
 			console.error(error);
+			window.location.href = `/${mockUser.id}`;
 		}
 	}, []);
 
